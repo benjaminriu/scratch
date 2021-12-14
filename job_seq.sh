@@ -1,4 +1,4 @@
-!/bin/bash
+#!/bin/bash
 
 # BEGIN SBATCH directives
 SBATCH --job-name=test_seq
