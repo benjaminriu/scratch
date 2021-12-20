@@ -1,4 +1,6 @@
 import os
+import numpy as np
+import pandas as pd
 def check_file_exists(file, repository):
     import os
     return file in os.listdir(repository)
