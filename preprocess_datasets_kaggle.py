@@ -7,6 +7,9 @@ import os
 import zipfile
 import urllib.request as req
 from dataset_preprocessing_utilities import *
+from kaggle.api.kaggle_api_extended import KaggleApi
+api = KaggleApi()
+api.authenticate()
 
 #args
 raw_files_infos = "download_files_infos_kaggle.csv"
