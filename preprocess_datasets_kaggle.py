@@ -33,8 +33,7 @@ for row_name, row in df_raw_infos.iterrows():
     kaggle_name = row["kaggle_api_name"]
     new_name = row["new_name"]
     download_name = row["original_file_name"]
-    unzipped_name = row["original_file_name"]
-    "unzipped_name"
+    unzipped_name = row["unzipped_name"]
     should_unzip = row["zipped"] 
     if not check_file_exists(new_name, raw_files_rep) or rerun:
         if not check_file_exists(download_name, raw_files_rep):
@@ -49,6 +48,7 @@ for row_name, row in df_raw_infos.iterrows():
                 zip_ref.extractall(raw_files_rep)
         if check_file_exists(download_name, raw_files_rep):
             os.remove(raw_files_rep+download_name)
+        if check_file_exists(download_name, raw_files_rep):
         os.rename(raw_files_rep+unzipped_name, raw_files_rep+new_name)
         
 #"raw_file_size"
