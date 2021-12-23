@@ -23,8 +23,7 @@ np_repository = "./raw_matrices_kaggle/"
 preprocessed_datasets_repository = "./preprocessed_datasets_kaggle/"
 
 verbose = True
-rerun = True
-
+rerun = False
 #run
 #download raw files
 df_raw_infos = pd.read_csv(infos_rep+raw_files_infos, index_col = 0)
@@ -46,9 +45,8 @@ for row_name, row in df_raw_infos.iterrows():
             print("unzipping")
             with zipfile.ZipFile(raw_files_rep+download_name, 'r') as zip_ref:
                 zip_ref.extractall(raw_files_rep)
-        if check_file_exists(download_name, raw_files_rep):
+        if check_file_exists(download_name, raw_files_rep) and download_name!=unzipped_name:
             os.remove(raw_files_rep+download_name)
-        if check_file_exists(download_name, raw_files_rep):
         os.rename(raw_files_rep+unzipped_name, raw_files_rep+new_name)
         
 #"raw_file_size"
@@ -80,25 +78,6 @@ for row_name, row in raw_description.iterrows():
 dataset_by_task_target = pd.DataFrame(row_list)
 dataset_by_task_target.sort_values("raw_file_size", inplace = True)
 dataset_by_task_target.to_csv(infos_rep+description_task_target)
-
-#manually reformat for unusual separators
-file_name = 'Yacht Hydrodynamicsyacht_hydrodynamics.data'
-with open(raw_files_rep+file_name, "r") as file:
-    data = file.readlines()
-for index,line in enumerate(data):
-    data[index] = line.replace(" \n", "\n").replace("  ", " ")
-with open(raw_files_rep+file_name, 'w') as file:
-    file.writelines( data )
-del data
-for row_name, ds_infos in dataset_by_task_target.iterrows():
-    if ds_infos["sep"] == ";":
-        with open(raw_files_rep+ds_infos["new_name"], "r") as file:
-            data = file.readlines()
-        for index,line in enumerate(data):
-            data[index] = line.replace(",", ".")
-        with open(raw_files_rep+ds_infos["new_name"], 'w') as file:
-            file.writelines( data )
-        del data
         
 #put in standard csv format while keeping only relevant rows
 dataset_by_task_target = dataset_by_task_target.where(pd.notnull(dataset_by_task_target), None)
@@ -310,3 +289,5 @@ if not dataset_by_task_target.set_index("name_task_target").loc[orig_name]["targ
     mat[:,-1] = renorma(y_)
     np.save(mat_name[:-4], mat)
     dataset_by_task_target.iloc[np.where(dataset_by_task_target["name_task_target"] == orig_name)[0][0]]["target_reformated"] = True
+    
+dataset_by_task_target.to_csv(infos_rep+description_task_target)
