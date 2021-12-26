@@ -57,7 +57,9 @@ parser.add_argument(
              "mars", 
              "all", 
              "best",
-             "fast"],
+             "fast",
+             "noCAT",
+             "cpu"],
     default="RF",
 )
 parser.add_argument(
@@ -138,6 +140,10 @@ if __name__ == '__main__':
         methods = ["RF",'mlrnet',"catboost","xgboost","regularnet"]
     elif args.method == "fast":
         methods = ['sklearn', "xgboost", "lgbm", "mars", 'fast_mlrnet',"fast_regularnet"]
+    elif args.method == "cpu":
+        methods = ['sklearn', "mars"]
+    elif args.method == "noCAT": 
+        methods = ['sklearn', 'mlrnet', "xgboost", "lgbm", "mars", "regularnet"]
     else:
         methods = [args.method]
     methods += ["HPO"] * args.hpo
