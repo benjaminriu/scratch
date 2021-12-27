@@ -1,9 +1,6 @@
 #!/bin/bash
 
 ## BEGIN SBATCH directives
-#SBATCH --job-name=JOBNAME
-#SBATCH --output=RES.txt
-
 #SBATCH --ntasks=1
 #SBATCH --time=23:59:59
 #SBATCH --gres=gpu:1
@@ -33,7 +30,7 @@ SEEDS=10
 OUTPATH='_strat.csv'
 OUTPATHKAG='_strat_kaggle.csv'
 METHODS='all' #choices=['RF', 'sklearn', 'mlrnet', "regularnet", "fast_mlrnet", "fast_regularnet", "catboost","xgboost", "lgbm", "mars", "all", "best", "fast", "noCAT", "cpu"]
-             
+
 INTER='interrupt_JOBNAME.txt'
 
 DATAPATH=$WORKDIR/datasets/preprocessed_datasets/
@@ -42,10 +39,13 @@ PYPATH=$(which python)
 
 for (( i=0; i<$NDATAREG; i++ )); do
     srun $PYPATH ./temp_run_all.py --method $METHODS --dataset_id $i --task_name regression --benchmark_output_file $OUTPATH --dataset_seeds $SEEDS --input_repository $DATAPATH --interrupt_file_path $INTER
+done
 for (( i=0; i<$NDATACLF; i++ )); do
     srun $PYPATH ./temp_run_all.py --method $METHODS --dataset_id $i --task_name classification --benchmark_output_file $OUTPATH --dataset_seeds $SEEDS --input_repository $DATAPATH --interrupt_file_path $INTER
+done
 for (( i=0; i<$NDATAKAG; i++ )); do
     srun $PYPATH ./temp_run_all.py --method $METHODS --dataset_id $i --task_name regression --benchmark_output_file $OUTPATHKAG --dataset_seeds $SEEDS --input_repository $DATAPATHKAG --interrupt_file_path $INTER
 done
 for (( i=0; i<$NDATAMUL; i++ )); do
     srun $PYPATH ./temp_run_all.py --method $METHODS --dataset_id $i --task_name multiclass --benchmark_output_file $OUTPATH --dataset_seeds $SEEDS --input_repository $DATAPATH --interrupt_file_path $INTER
+done
