@@ -21,7 +21,6 @@ module load anaconda3/2020.11
 which python
 conda activate mlrnet_benchmark
 which python
-nvidia-smi
 
 NDATAREG=21
 NDATACLF=24
@@ -40,10 +39,12 @@ PYPATH=$(which python)
 
 for (( i=0; i<$NDATAREG; i++ )); do
     srun $PYPATH ./temp_run_all.py --method $METHODS --dataset_id $i --task_name regression --benchmark_output_file $OUTPATH --dataset_seeds $SEEDS --input_repository $DATAPATH --interrupt_file_path $INTER
+done
 for (( i=0; i<$NDATACLF; i++ )); do
     srun $PYPATH ./temp_run_all.py --method $METHODS --dataset_id $i --task_name classification --benchmark_output_file $OUTPATH --dataset_seeds $SEEDS --input_repository $DATAPATH --interrupt_file_path $INTER
-for (( i=0; i<$NDATAKAG; i++ )); do
-    srun $PYPATH ./temp_run_all.py --method $METHODS --dataset_id $i --task_name regression --benchmark_output_file $OUTPATHKAG --dataset_seeds $SEEDS --input_repository $DATAPATHKAG --interrupt_file_path $INTER
 done
+for (( i=0; i<$NDATAKAG; i++ )); do
+    srun $PYPATH ./temp_run_all.py --method $METHODS --dataset_id $i --task_name regression --benchmark_output_file $OUTPATHKAG --dataset_seeds $SEEDS --input_repository $DATAPATHKAG --interrupt_file_path $INTERdone
 for (( i=0; i<$NDATAMUL; i++ )); do
     srun $PYPATH ./temp_run_all.py --method $METHODS --dataset_id $i --task_name multiclass --benchmark_output_file $OUTPATH --dataset_seeds $SEEDS --input_repository $DATAPATH --interrupt_file_path $INTER
+done
